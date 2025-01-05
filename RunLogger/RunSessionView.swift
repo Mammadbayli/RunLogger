@@ -32,10 +32,28 @@ struct RunSessionView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            DatePicker(selection: Bindable(wrappedValue: run).timestamp) {
-                Text("Date")
-                    .font(.system(size: 28))
+        VStack(alignment: .leading, spacing: 60) {
+            VStack(alignment: .trailing) {
+                DatePicker(selection: Bindable(wrappedValue: run).timestamp) {
+                    Text("Date")
+                        .font(.system(size: 28))
+                }
+
+                HStack {
+                    Button {
+                        run.timestamp = .now
+                    } label: {
+                        Text("Today")
+                    }
+                    .buttonStyle(.bordered)
+
+                    Button {
+                        run.timestamp = .now.addingTimeInterval(-86400)
+                    } label: {
+                        Text("Yesterday")
+                    }
+                    .buttonStyle(.bordered)
+                }
             }
 
             PresetAccumulatorInput(label: "Duration",
@@ -53,9 +71,9 @@ struct RunSessionView: View {
                 case .edit:
                     break
                 }
-
             } label: {
-                Text("Done")
+                Text("Add")
+                    .frame(maxWidth: .infinity)
             }
             .disabled(run.distance.value == 0.0 || run.duration.value == 0)
             .buttonStyle(.borderedProminent)

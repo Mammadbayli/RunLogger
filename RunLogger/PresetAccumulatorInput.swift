@@ -10,11 +10,35 @@ struct PresetAccumulatorInput<T: ValueDisplayable>: View {
     var label: String
     var values: [T]
     @Binding var accumulator: T
+    @State private var offset = CGSize.zero
+
+    private var drag: some Gesture {
+        DragGesture()
+            .onChanged { gesture in
+                offset = gesture.translation
+            }
+            .onEnded { _ in
+                offset = .zero
+            }
+    }
 
     var body: some View {
-        VStack {
-            Text("\(label): \(accumulator.toString)")
-                .font(.system(size: 28))
+        VStack(alignment: .leading) {
+            HStack {
+                Text("\(label): \(accumulator.toString)")
+                    .font(.system(size: 28))
+
+                Spacer()
+
+                Button {
+                    accumulator.value = .zero
+                } label: {
+                    Text("Reset")
+                        .foregroundStyle(.red)
+                }
+                .buttonStyle(.bordered)
+            }
+
 
             ScrollView(.horizontal) {
                 HStack {

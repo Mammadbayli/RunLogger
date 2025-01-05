@@ -35,6 +35,11 @@ extension Run {
     var dateString: String {
         timestamp.formatted(date: .abbreviated, time: .shortened)
     }
+
+    var detailsString: String {
+        "\(distance.toString) in \(duration.toString)"
+    }
+
     var string: String {
         "\(dateString) \(distance.toString) \(duration.toString)"
     }

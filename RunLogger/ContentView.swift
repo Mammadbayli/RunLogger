@@ -10,7 +10,7 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Run]
+    @Query(sort: \Run.timestamp, order: .reverse) private var items: [Run]
     @State private var showNewRunView = false
 
     var body: some View {
@@ -20,9 +20,11 @@ struct ContentView: View {
                     NavigationLink {
                         RunSessionView(run: item)
                     } label: {
-                        Text(
-                            item.string
-                        )
+                        VStack(alignment: .leading) {
+                            Text(item.detailsString)
+                            Text(item.dateString)
+                        }
+
                     }
                 }
                 .onDelete(perform: deleteItems)
@@ -39,7 +41,9 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showNewRunView) {
-                RunSessionView()
+                NavigationStack {
+                    RunSessionView()
+                }
             }
         } detail: {
             Text("Select an item")
@@ -66,5 +70,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Run.self, inMemory: true)
+        .modelContainer(for: Run.self, inMemory: false)
 }
